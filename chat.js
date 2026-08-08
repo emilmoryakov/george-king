@@ -9,24 +9,22 @@ class ChatMessage extends HTMLElement {
 
 customElements.define('chat-message', ChatMessage);
 
-const form = document.getElementById('chat-form');
-const input = document.getElementById('message-input');
-const messages = document.getElementById('messages');
+const list = document.getElementById('messages');
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const text = input.value.trim();
-  if (!text) {
-    return;
-  }
-
+export function addMessage(text, sender) {
   const message = document.createElement('chat-message');
-  message.setAttribute('sender', 'me');
+  message.setAttribute('sender', sender);
   message.textContent = text;
-  messages.appendChild(message);
-  messages.scrollTop = messages.scrollHeight;
+  list.appendChild(message);
+  scrollDown();
+  return message;
+}
 
-  input.value = '';
-  input.focus();
-});
+export function appendText(message, text) {
+  message.textContent += text;
+  scrollDown();
+}
+
+function scrollDown() {
+  list.scrollTop = list.scrollHeight;
+}
