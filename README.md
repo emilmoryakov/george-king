@@ -1,8 +1,9 @@
 # George King
 
 A chat web app I'm building for my Web Application Development course. Right now
-it's a static page — you type a message, press send, and it appears in the chat.
-The AI part comes later.
+it's a static page styled with Tailwind (CDN): a sidebar with conversations and a
+chat panel. Sending a message appends it to the chat — the AI part comes later.
+Messages are rendered with a small `<chat-message>` custom element.
 
 ## Running it
 
