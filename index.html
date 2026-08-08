@@ -4,31 +4,67 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>George King</title>
-    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="chat">
-      <header class="chat-header">
-        <h1>George King</h1>
-        <p>his majesty is listening</p>
-      </header>
+  <body class="h-dvh bg-zinc-900 font-sans text-zinc-100">
+    <div class="flex h-full">
+      <aside class="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950">
+        <div class="p-4">
+          <button
+            class="w-full rounded-lg bg-violet-600 py-2 font-medium hover:bg-violet-500"
+          >
+            New chat
+          </button>
+        </div>
+        <nav class="flex-1 space-y-1 overflow-y-auto px-2">
+          <a href="#" class="block rounded-lg bg-zinc-800 px-3 py-2">
+            Weekend trip ideas
+          </a>
+          <a
+            href="#"
+            class="block rounded-lg px-3 py-2 text-zinc-400 hover:bg-zinc-800/50"
+          >
+            CSS grid vs flexbox
+          </a>
+        </nav>
+        <p class="p-4 text-xs text-zinc-600">george king · v0.1</p>
+      </aside>
 
-      <ul class="messages" id="messages">
-        <li class="msg bot">
-          Greetings. I am George. Say something below and it will appear here.
-        </li>
-      </ul>
+      <main class="flex min-w-0 flex-1 flex-col">
+        <header class="border-b border-zinc-800 px-6 py-4">
+          <h1 class="text-lg font-semibold tracking-wide">George King</h1>
+          <p class="text-sm text-zinc-500">his majesty is listening</p>
+        </header>
 
-      <form class="chat-form" id="chat-form">
-        <input
-          type="text"
-          id="message-input"
-          placeholder="Address the king…"
-          autocomplete="off"
-          aria-label="Message"
-        />
-        <button type="submit">Send</button>
-      </form>
+        <div id="messages" class="flex flex-1 flex-col gap-3 overflow-y-auto p-6">
+          <chat-message sender="bot">
+            Greetings. What shall we discuss today?
+          </chat-message>
+          <chat-message sender="me">
+            I need a few ideas for a weekend trip, somewhere cheap.
+          </chat-message>
+          <chat-message sender="bot">
+            Then I decree: a night train, a small town nobody visits, and a very long
+            breakfast. Shall I elaborate?
+          </chat-message>
+        </div>
+
+        <form id="chat-form" class="flex gap-3 border-t border-zinc-800 p-4">
+          <textarea
+            id="message-input"
+            rows="2"
+            placeholder="Address the king…"
+            aria-label="Message"
+            class="flex-1 resize-none rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 outline-none placeholder:text-zinc-500 focus:border-violet-500"
+          ></textarea>
+          <button
+            type="submit"
+            class="self-end rounded-lg bg-violet-600 px-5 py-2 font-medium hover:bg-violet-500"
+          >
+            Send
+          </button>
+        </form>
+      </main>
     </div>
 
     <script src="chat.js"></script>
