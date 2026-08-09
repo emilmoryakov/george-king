@@ -21,13 +21,14 @@ no credit is needed. `.env.local` is gitignored, and so is the database file.
 
 ## Structure
 
-- `src/app/` — pages (`/`, `/conversations/[id]`) and API routes
-  (`/api/conversations`, `/api/messages`, `/api/chat`)
+- `src/app/` — pages (`/`, `/conversations/[id]`) and API routes; `/api/chat`
+  streams replies with the Vercel AI SDK and persists both sides of the exchange
 - `prisma/schema.prisma` — Conversation and Message models (SQLite)
-- `src/lib/prisma.ts` — the shared Prisma client instance
-- `src/lib/api/` — small client-side fetch wrappers around the API routes
-- `src/components/` — sidebar and chat components; data fetching goes through
-  TanStack Query (queries + mutations with invalidation)
+- `src/lib/data.ts` — the data access layer; every query lives here, API routes
+  and server components just call it
+- `src/components/` — the sidebar renders on the server straight from the
+  database; conversation create/delete update it optimistically and roll back
+  on failure. The chat panel uses the AI SDK's `useChat`.
 
 Commits are checked by a pre-commit hook — if ESLint or Prettier complain, the
 commit is rejected. Fix with `npm run format` and try again.

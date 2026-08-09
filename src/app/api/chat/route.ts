@@ -1,47 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { streamText, convertToModelMessages, type UIMessage } from 'ai';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { saveMessage } from '@/lib/data';
 
-const MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
+const MODEL = 'openai/gpt-oss-20b:free';
 
 const SYSTEM =
   'You are George, a courteous king. Answer helpfully and concisely, with an occasional royal flourish.';
 
-export async function POST(request: NextRequest) {
-  const { conversationId } = await request.json();
+const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY });
 
-  const history = await prisma.message.findMany({
-    where: { conversationId },
-    orderBy: { createdAt: 'asc' },
-    select: { role: true, content: true },
-  });
+export async function POST(request: Request) {
+  const { messages, conversationId } = (await request.json()) as {
+    messages: UIMessage[];
+    conversationId: string;
+  };
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      // The key lives in .env.local and never reaches the browser.
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'system', content: SYSTEM }, ...history],
-    }),
-  });
+  // Persist the user message before the model sees it.
+  const last = messages[messages.length - 1];
+  const text = last.parts.map((part) => (part.type === 'text' ? part.text : '')).join('');
+  await saveMessage(conversationId, 'user', text);
 
-  if (!response.ok) {
-    return NextResponse.json(
-      { error: `OpenRouter answered ${response.status}` },
-      { status: 502 },
-    );
-  }
-
-  const data = await response.json();
-  const reply = await prisma.message.create({
-    data: {
-      conversationId,
-      role: 'assistant',
-      content: data.choices[0].message.content,
+  const result = streamText({
+    model: openrouter(MODEL),
+    system: SYSTEM,
+    messages: await convertToModelMessages(messages),
+    onFinish: async ({ text: reply }) => {
+      await saveMessage(conversationId, 'assistant', reply);
     },
   });
-  return NextResponse.json(reply, { status: 201 });
+
+  return result.toUIMessageStreamResponse();
 }

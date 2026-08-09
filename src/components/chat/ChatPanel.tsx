@@ -1,28 +1,26 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, type UIMessage } from 'ai';
+import { useRouter } from 'next/navigation';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { listMessages, createMessage } from '@/lib/api/messages';
-import { requestReply } from '@/lib/api/chat';
 
-export default function ChatPanel({ conversationId }: { conversationId: string }) {
-  const queryClient = useQueryClient();
+export default function ChatPanel({
+  conversationId,
+  initialMessages,
+}: {
+  conversationId: string;
+  initialMessages: UIMessage[];
+}) {
+  const router = useRouter();
 
-  const { data: messages = [] } = useQuery({
-    queryKey: ['messages', conversationId],
-    queryFn: () => listMessages(conversationId),
-  });
-
-  const send = useMutation({
-    mutationFn: async (text: string) => {
-      await createMessage(conversationId, text);
-      // Show the user message right away, before the reply arrives.
-      await queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
-      return requestReply(conversationId);
-    },
-    onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ['messages', conversationId] }),
+  const { messages, sendMessage, status, error } = useChat({
+    id: conversationId,
+    messages: initialMessages,
+    transport: new DefaultChatTransport({ api: '/api/chat', body: { conversationId } }),
+    // Refresh the server-rendered parts once the reply is persisted.
+    onFinish: () => router.refresh(),
   });
 
   return (
@@ -33,10 +31,13 @@ export default function ChatPanel({ conversationId }: { conversationId: string }
       </header>
       <MessageList
         messages={messages}
-        loading={send.isPending}
-        error={send.error?.message}
+        loading={status === 'submitted'}
+        error={error?.message}
       />
-      <MessageInput onSend={send.mutate} disabled={send.isPending} />
+      <MessageInput
+        onSend={(text) => sendMessage({ text })}
+        disabled={status !== 'ready'}
+      />
     </main>
   );
 }

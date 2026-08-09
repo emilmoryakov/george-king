@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import QueryProvider from '@/components/providers/QueryProvider';
 import Sidebar from '@/components/sidebar/Sidebar';
 
 export const metadata: Metadata = {
@@ -12,10 +11,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="flex h-dvh bg-zinc-900 font-sans text-zinc-100 antialiased">
-        <QueryProvider>
-          <Sidebar />
-          {children}
-        </QueryProvider>
+        <Sidebar />
+        {children}
       </body>
     </html>
   );
