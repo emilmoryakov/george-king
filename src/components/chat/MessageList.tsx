@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { UIMessage } from 'ai';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
-import type { Message as MessageType } from '@/lib/types';
 
 export default function MessageList({
   messages,
   loading,
   error,
 }: {
-  messages: MessageType[];
+  messages: UIMessage[];
   loading: boolean;
   error?: string;
 }) {
