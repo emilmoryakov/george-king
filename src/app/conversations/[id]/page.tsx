@@ -6,5 +6,5 @@ export default async function ConversationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ChatPanel conversationId={Number(id)} />;
+  return <ChatPanel conversationId={id} />;
 }

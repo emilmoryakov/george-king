@@ -1,6 +1,6 @@
 import type { Message } from '../types';
 
-export async function requestReply(conversationId: number): Promise<Message> {
+export async function requestReply(conversationId: string): Promise<Message> {
   const response = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

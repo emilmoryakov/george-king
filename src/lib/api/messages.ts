@@ -1,12 +1,12 @@
 import type { Message } from '../types';
 
-export async function listMessages(conversationId: number): Promise<Message[]> {
+export async function listMessages(conversationId: string): Promise<Message[]> {
   const response = await fetch(`/api/messages?conversationId=${conversationId}`);
   return response.json();
 }
 
 export async function createMessage(
-  conversationId: number,
+  conversationId: string,
   content: string,
 ): Promise<Message> {
   const response = await fetch('/api/messages', {

@@ -8,9 +8,11 @@ import type { Message as MessageType } from '@/lib/types';
 export default function MessageList({
   messages,
   loading,
+  error,
 }: {
   messages: MessageType[];
   loading: boolean;
+  error?: string;
 }) {
   const bottom = useRef<HTMLDivElement>(null);
 
@@ -24,6 +26,11 @@ export default function MessageList({
         <Message key={message.id} message={message} />
       ))}
       {loading && <TypingIndicator />}
+      {error && (
+        <p className="self-start text-sm text-red-400">
+          The king is unavailable: {error}
+        </p>
+      )}
       <div ref={bottom} />
     </div>
   );
