@@ -1,12 +1,18 @@
 # George King
 
-A chat web app I'm building for my Web Application Development course. Styled with
-Tailwind (CDN): a sidebar with conversations and a chat panel. Messages are rendered
-with a small `<chat-message>` custom element, and replies come from OpenRouter,
-streamed into the page word by word.
+A chat web app I'm building for my Web Application Development course, now as a
+React app (Vite). A sidebar lists conversations from a mock in-memory API,
+switching one loads its messages, and replies come from OpenRouter. Tailwind via
+CDN handles the styling.
 
-The JavaScript is split into three ES modules: `main.js` (entry point and event
-listeners), `api.js` (fetch + streaming), `chat.js` (DOM).
+The previous plain-JavaScript version lives untouched in `legacy/`.
+
+## Running it
+
+```sh
+npm install
+npm run dev
+```
 
 ## API key
 
@@ -14,17 +20,12 @@ The first time you send a message, the page asks for an OpenRouter API key
 (create one at openrouter.ai). It is stored in your browser's localStorage and
 never committed to the repo. The app uses a free model, so no credit is needed.
 
-## Running it
+## Structure
 
-Open `index.html` in a browser. That's it, there is no build step yet.
-
-For development:
-
-```sh
-npm install    # dev tools + git hook
-npm run lint
-npm run format
-```
+- `src/components/sidebar/` — conversation list
+- `src/components/chat/` — message list, input, typing indicator
+- `src/api/` — mock conversations/messages modules (in-memory, promise-based) and
+  the real OpenRouter call
 
 Commits are checked by a pre-commit hook — if ESLint or Prettier complain, the
 commit is rejected. Fix with `npm run format` and try again.
