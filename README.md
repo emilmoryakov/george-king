@@ -1,31 +1,30 @@
 # George King
 
-A chat web app I'm building for my Web Application Development course, now as a
-React app (Vite). A sidebar lists conversations from a mock in-memory API,
-switching one loads its messages, and replies come from OpenRouter. Tailwind via
-CDN handles the styling.
+A chat web app I'm building for my Web Application Development course, now on
+Next.js (App Router + TypeScript). Each conversation has its own URL, the mock
+database lives server-side behind API routes, and the OpenRouter key never
+leaves the server.
 
-The previous plain-JavaScript version lives untouched in `legacy/`.
+The original plain-JavaScript version lives untouched in `legacy/`.
 
 ## Running it
 
 ```sh
 npm install
-npm run dev
+cp .env.example .env.local   # then paste your OpenRouter key into it
+npm run dev                  # http://localhost:3000
 ```
 
-## API key
-
-The first time you send a message, the page asks for an OpenRouter API key
-(create one at openrouter.ai). It is stored in your browser's localStorage and
-never committed to the repo. The app uses a free model, so no credit is needed.
+The key comes from openrouter.ai/settings/keys — the app uses a free model, so
+no credit is needed. `.env.local` is gitignored.
 
 ## Structure
 
-- `src/components/sidebar/` — conversation list
-- `src/components/chat/` — message list, input, typing indicator
-- `src/api/` — mock conversations/messages modules (in-memory, promise-based) and
-  the real OpenRouter call
+- `src/app/` — pages (`/`, `/conversations/[id]`) and API routes
+  (`/api/conversations`, `/api/messages`, `/api/chat`)
+- `src/lib/db.ts` — the in-memory mock database (server-side, resets on restart)
+- `src/lib/api/` — small client-side fetch wrappers around the API routes
+- `src/components/` — sidebar and chat components
 
 Commits are checked by a pre-commit hook — if ESLint or Prettier complain, the
 commit is rejected. Fix with `npm run format` and try again.

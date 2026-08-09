@@ -1,4 +1,13 @@
-const db = [
+// In-memory mock database, server-side only. Resets on restart — real
+// persistence is a later assignment.
+import type { Conversation, Message } from './types';
+
+export const conversations: Conversation[] = [
+  { id: 1, title: 'Weekend trip ideas' },
+  { id: 2, title: 'CSS grid vs flexbox' },
+];
+
+export const messages: Message[] = [
   {
     id: 1,
     conversationId: 1,
@@ -27,14 +36,14 @@ const db = [
   },
 ];
 
-let nextId = db.length + 1;
+let nextId = messages.length + 1;
 
-export function listMessages(conversationId) {
-  return Promise.resolve(db.filter((m) => m.conversationId === conversationId));
-}
-
-export function createMessage(conversationId, role, content) {
+export function addMessage(
+  conversationId: number,
+  role: Message['role'],
+  content: string,
+): Message {
   const message = { id: nextId++, conversationId, role, content };
-  db.push(message);
-  return Promise.resolve(message);
+  messages.push(message);
+  return message;
 }

@@ -1,9 +1,15 @@
-import { useEffect, useState } from 'react';
-import ConversationItem from './ConversationItem.jsx';
-import { listConversations } from '../../api/conversations.js';
+'use client';
 
-export default function Sidebar({ activeId, onSelect }) {
-  const [conversations, setConversations] = useState([]);
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import ConversationItem from './ConversationItem';
+import { listConversations } from '@/lib/api/conversations';
+import type { Conversation } from '@/lib/types';
+
+export default function Sidebar() {
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const params = useParams();
+  const activeId = Number(params.id);
 
   useEffect(() => {
     listConversations().then(setConversations);
@@ -22,11 +28,10 @@ export default function Sidebar({ activeId, onSelect }) {
             key={conversation.id}
             conversation={conversation}
             active={conversation.id === activeId}
-            onSelect={onSelect}
           />
         ))}
       </nav>
-      <p className="p-4 text-xs text-zinc-600">george king · v0.2</p>
+      <p className="p-4 text-xs text-zinc-600">george king · v0.3</p>
     </aside>
   );
 }

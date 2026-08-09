@@ -1,9 +1,17 @@
+'use client';
+
 import { useState } from 'react';
 
-export default function MessageInput({ onSend, disabled }) {
+export default function MessageInput({
+  onSend,
+  disabled,
+}: {
+  onSend: (text: string) => void;
+  disabled: boolean;
+}) {
   const [text, setText] = useState('');
 
-  function submit(event) {
+  function submit(event: React.FormEvent) {
     event.preventDefault();
     const trimmed = text.trim();
     if (!trimmed || disabled) {
@@ -18,7 +26,7 @@ export default function MessageInput({ onSend, disabled }) {
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
-        rows="2"
+        rows={2}
         placeholder="Address the king…"
         aria-label="Message"
         className="flex-1 resize-none rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 outline-none placeholder:text-zinc-500 focus:border-violet-500"
