@@ -1,4 +1,6 @@
-export default function Message({ message }) {
+import type { Message as MessageType } from '@/lib/types';
+
+export default function Message({ message }: { message: MessageType }) {
   const mine = message.role === 'user';
   return (
     <p

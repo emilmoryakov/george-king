@@ -1,9 +1,18 @@
-import { useEffect, useRef } from 'react';
-import Message from './Message.jsx';
-import TypingIndicator from './TypingIndicator.jsx';
+'use client';
 
-export default function MessageList({ messages, loading }) {
-  const bottom = useRef(null);
+import { useEffect, useRef } from 'react';
+import Message from './Message';
+import TypingIndicator from './TypingIndicator';
+import type { Message as MessageType } from '@/lib/types';
+
+export default function MessageList({
+  messages,
+  loading,
+}: {
+  messages: MessageType[];
+  loading: boolean;
+}) {
+  const bottom = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottom.current?.scrollIntoView();
