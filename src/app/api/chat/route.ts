@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { messages, addMessage } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 const MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
 
@@ -9,9 +9,11 @@ const SYSTEM =
 export async function POST(request: NextRequest) {
   const { conversationId } = await request.json();
 
-  const history = messages
-    .filter((m) => m.conversationId === conversationId)
-    .map(({ role, content }) => ({ role, content }));
+  const history = await prisma.message.findMany({
+    where: { conversationId },
+    orderBy: { createdAt: 'asc' },
+    select: { role: true, content: true },
+  });
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
@@ -34,6 +36,12 @@ export async function POST(request: NextRequest) {
   }
 
   const data = await response.json();
-  const reply = addMessage(conversationId, 'assistant', data.choices[0].message.content);
+  const reply = await prisma.message.create({
+    data: {
+      conversationId,
+      role: 'assistant',
+      content: data.choices[0].message.content,
+    },
+  });
   return NextResponse.json(reply, { status: 201 });
 }

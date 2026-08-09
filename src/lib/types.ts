@@ -1,11 +1,11 @@
 export type Conversation = {
-  id: number;
+  id: string;
   title: string;
 };
 
 export type Message = {
-  id: number;
-  conversationId: number;
+  id: string;
+  conversationId: string;
   role: 'user' | 'assistant';
   content: string;
 };
