@@ -7,7 +7,7 @@ export default async function Sidebar() {
   return (
     <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950">
       <ConversationList conversations={conversations} />
-      <p className="p-4 text-xs text-zinc-600">george king · v0.5</p>
+      <p className="p-4 text-xs text-zinc-600">george king · v0.6</p>
     </aside>
   );
 }
