@@ -20,6 +20,13 @@ npm run dev                  # http://localhost:3000
 The key comes from openrouter.ai/settings/keys — the app uses a free model, so
 no credit is needed. `.env.local` is gitignored.
 
+## PWA
+
+The app is installable (manifest + icons + iOS metadata). A service worker
+(`public/sw.js`) pre-caches the app shell, cleans up old caches on activate,
+never touches API calls, and serves `public/offline.html` when a page is opened
+without a connection.
+
 ## Deployment
 
 The app deploys to Vercel. The database in production is Prisma Postgres from
