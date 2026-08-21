@@ -1,8 +1,13 @@
 @import 'tailwindcss';
 
-/* Full-height app shell. 100vh first as a fallback for browsers that
-   don't know dvh units, 100dvh where supported. */
+/* Full-height app shell. 100vh everywhere, 100dvh where the browser
+   supports it (the minifier strips a plain double declaration). */
 body {
   height: 100vh;
-  height: 100dvh;
+}
+
+@supports (height: 100dvh) {
+  body {
+    height: 100dvh;
+  }
 }
