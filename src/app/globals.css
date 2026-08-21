@@ -1,1 +1,8 @@
 @import 'tailwindcss';
+
+/* Full-height app shell. 100vh first as a fallback for browsers that
+   don't know dvh units, 100dvh where supported. */
+body {
+  height: 100vh;
+  height: 100dvh;
+}
