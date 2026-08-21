@@ -6,6 +6,10 @@ export function listConversations() {
   return prisma.conversation.findMany({ orderBy: { createdAt: 'desc' } });
 }
 
+export function getConversation(id: string) {
+  return prisma.conversation.findUnique({ where: { id } });
+}
+
 export function createConversation(title: string) {
   return prisma.conversation.create({ data: { title } });
 }
