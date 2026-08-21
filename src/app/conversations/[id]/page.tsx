@@ -1,6 +1,7 @@
+import { notFound } from 'next/navigation';
 import type { UIMessage } from 'ai';
 import ChatPanel from '@/components/chat/ChatPanel';
-import { listMessages } from '@/lib/data';
+import { getConversation, listMessages } from '@/lib/data';
 
 export default async function ConversationPage({
   params,
@@ -8,6 +9,10 @@ export default async function ConversationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const conversation = await getConversation(id);
+  if (!conversation) {
+    notFound();
+  }
   const messages = await listMessages(id);
 
   const initialMessages: UIMessage[] = messages.map((m) => ({
