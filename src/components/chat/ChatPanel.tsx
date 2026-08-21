@@ -2,7 +2,6 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
-import { useRouter } from 'next/navigation';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
@@ -13,14 +12,10 @@ export default function ChatPanel({
   conversationId: string;
   initialMessages: UIMessage[];
 }) {
-  const router = useRouter();
-
   const { messages, sendMessage, status, error } = useChat({
     id: conversationId,
     messages: initialMessages,
     transport: new DefaultChatTransport({ api: '/api/chat', body: { conversationId } }),
-    // Refresh the server-rendered parts once the reply is persisted.
-    onFinish: () => router.refresh(),
   });
 
   return (
