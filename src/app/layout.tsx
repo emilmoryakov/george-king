@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="flex h-dvh bg-zinc-900 font-sans text-zinc-100 antialiased">
+      <body className="flex bg-zinc-900 font-sans text-zinc-100 antialiased">
         <Sidebar />
         {children}
       </body>
