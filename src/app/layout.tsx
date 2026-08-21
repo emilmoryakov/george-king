@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   description: 'An AI chat app where the assistant happens to be a king.',
 };
 
+// Everything renders per request — the sidebar reads the database, so pages
+// must not be prerendered at build time.
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

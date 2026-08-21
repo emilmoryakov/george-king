@@ -12,18 +12,27 @@ The original plain-JavaScript version lives untouched in `legacy/`.
 ```sh
 npm install
 cp .env.example .env.local   # then paste your OpenRouter key into it
-npm run db:migrate           # creates the local SQLite database
+docker compose up -d         # local Postgres
+npm run db:migrate           # applies the migrations
 npm run dev                  # http://localhost:3000
 ```
 
 The key comes from openrouter.ai/settings/keys — the app uses a free model, so
-no credit is needed. `.env.local` is gitignored, and so is the database file.
+no credit is needed. `.env.local` is gitignored.
+
+## Deployment
+
+The app deploys to Vercel. The database in production is Prisma Postgres from
+the Vercel Storage tab (it injects `DATABASE_URL` automatically), and the
+OpenRouter key is set in the project's environment variables. The build script
+runs `prisma migrate deploy`, so pending migrations are applied on every
+deployment. Every pull request gets its own preview deployment.
 
 ## Structure
 
 - `src/app/` — pages (`/`, `/conversations/[id]`) and API routes; `/api/chat`
   streams replies with the Vercel AI SDK and persists both sides of the exchange
-- `prisma/schema.prisma` — Conversation and Message models (SQLite)
+- `prisma/schema.prisma` — Conversation and Message models (PostgreSQL)
 - `src/lib/data.ts` — the data access layer; every query lives here, API routes
   and server components just call it
 - `src/components/` — the sidebar renders on the server straight from the
